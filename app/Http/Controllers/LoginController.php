@@ -33,15 +33,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            if ($user->level == "admin" || $user->level == "pembina" || $user->level == "kepala_sekolah") {
-                $request->session()->regenerate();
-
-                return redirect()->intended('dashboard');
-            } else {
-                Auth::logout();
-            }
+            return redirect()->intended('dashboard');
         }
 
         return back()->withErrors([

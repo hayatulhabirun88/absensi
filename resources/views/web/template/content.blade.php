@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>@yield('title') | SIMESKUL</title>
+    <title>@yield('title') | SIMABSEN</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('/') }}otika/assets/css/app.min.css">
     <!-- Template CSS -->
@@ -31,8 +31,8 @@
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
                         <a href="/">
-                            <img alt="image" src="{{ asset('/') }}logo.png" class="header-logo" />
-                            <span class="logo-name">Simeskul</span>
+                            <img alt="image" src="{{ asset('/') }}logo.jpg" class="header-logo" />
+                            <span class="logo-name">SIMABSEN</span>
                         </a>
                     </div>
                     @include('web.template.sidebar')

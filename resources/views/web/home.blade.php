@@ -13,8 +13,8 @@
                         <div class="row ">
                             <div class="col-12">
                                 <div class="card-content">
-                                    <h2 class="font-15 text-center">Selamat Datang di SIMESKUL SMA
-                                        NEGERI 1 BAUBAU
+                                    <h2 class="font-15 text-center">Selamat Datang di SMA
+                                        NEGERI 3 LAPANDEWA
                                     </h2>
 
                                 </div>
@@ -33,8 +33,8 @@
                         <div class="row ">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                                 <div class="card-content">
-                                    <h5 class="font-15">Ekstrakulikuler</h5>
-                                    <h2 class="mb-3 font-18">{{ \App\Models\Ekstrakulikuler::count() }}</h2>
+                                    <h5 class="font-15">Guru</h5>
+                                    <h2 class="mb-3 font-18">{{ \App\Models\Guru::count() }}</h2>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -54,8 +54,8 @@
                         <div class="row ">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                                 <div class="card-content">
-                                    <h5 class="font-15"> Pembina</h5>
-                                    <h2 class="mb-3 font-18">{{ \App\Models\Pembina::count() }}</h2>
+                                    <h5 class="font-15"> Siswa</h5>
+                                    <h2 class="mb-3 font-18">{{ \App\Models\Siswa::count() }}</h2>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">

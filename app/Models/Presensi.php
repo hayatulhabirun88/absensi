@@ -2,29 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Siswa;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Presensi extends Model
 {
     use HasFactory;
-
     protected $table = 'presensis';
 
     protected $guarded = [];
 
-    public function ekstrakulikuler()
+    public function siswa()
     {
-        return $this->belongsTo(Ekstrakulikuler::class);
+        return $this->belongsTo(Siswa::class);
     }
 
-    public function pembina()
+    public function mataPelajaran()
     {
-        return $this->belongsTo(Pembina::class);
+        return $this->belongsTo(Mata_pelajaran::class);
     }
 
-    public function pendaftar()
+    public function guru()
     {
-        return $this->belongsTo(Pendaftar::class);
+        return $this->belongsTo(Guru::class);
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 }

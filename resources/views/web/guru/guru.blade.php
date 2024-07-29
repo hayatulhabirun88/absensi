@@ -1,30 +1,28 @@
 @extends('web.template.content')
 
-@section('title')
-    Daftar Pengguna
-@endsection
+@section('title', 'Guru')
 
 @section('content')
     <div class="row ">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Daftar Pengguna</h4>
+                    <h4>Guru</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-8">
                             <div class="mb-3">
-                                <form action="/pengguna" method="get" id="searchForm">
+                                <form action="/guru" method="get" id="searchForm">
                                     <input type="text" class="form-control" name="cari" id="searchInput"
-                                        placeholder="Cari" />
+                                        placeholder="Cari" value="{{ Request::get('cari') }}" autofocus />
                                 </form>
                             </div>
 
                         </div>
                         <div class="col-4">
                             <a type="submit" name="" id="" class="btn btn-primary float-right "
-                                href="/pengguna/create" role="button">Tambah</a>
+                                href="/guru/create" role="button">Tambah</a>
 
                         </div>
 
@@ -35,30 +33,33 @@
                             <thead>
                                 <tr>
                                     <th width="50">No</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
-                                    <th>Level</th>
+                                    <th>NIP</th>
+                                    <th>Nama Guru</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Alamat</th>
+                                    <th>No HP</th>
                                     <th width="150">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($user as $index => $usr)
+                                @foreach ($guru as $index => $gr)
                                     <tr>
-                                        <td>{{ $index + $user->firstItem() }}</td>
-                                        <td>{{ $usr->name }}</td>
-                                        <td>{{ $usr->email }}</td>
-                                        <td>{{ $usr->level }}</td>
-                                        </td>
+                                        <td>{{ $index + $guru->firstItem() }}</td>
+                                        <td>{{ $gr->nip }}</td>
+                                        <td>{{ $gr->nama_guru }}</td>
+                                        <td>{{ $gr->matapelajaran }}</td>
+                                        <td>{{ $gr->alamat }}</td>
+                                        <td>{{ $gr->no_hp }}</td>
                                         <td>
-                                            <a href="/pengguna/{{ $usr->id }}/edit" class="btn btn-sm btn-warning"><i
+                                            <a href="/guru/{{ $gr->id }}/edit" class="btn btn-sm btn-warning"><i
                                                     class="far fa-edit"></i></a>
-                                            <form action="{{ route('destroy.pengguna', $usr->id) }}" style="display:inline"
-                                                method="POST" id="deleteuserForm-{{ $usr->id }}">
+                                            <form action="{{ route('guru.destroy', $gr->id) }}" style="display:inline"
+                                                method="POST" id="deleteguruForm-{{ $gr->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger hapus-user-btn"
-                                                    data-nama-usr="{{ $usr->name }}"
-                                                    data-form-id="deleteuserForm-{{ $usr->id }}">
+                                                <button type="submit" class="btn btn-sm btn-danger hapus-guru-btn"
+                                                    data-nama-gr="{{ $gr->nama_guru }}"
+                                                    data-form-id="deleteguruForm-{{ $gr->id }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -68,15 +69,12 @@
                             </tbody>
                         </table>
                     </div>
-                    {{ $user->links('pagination::bootstrap-5') }}
+                    {{ $guru->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-@push('style')
-@endpush
 
 @push('script')
     <!-- JS Libraies -->
@@ -96,14 +94,14 @@
             });
 
 
-            $(".hapus-user-btn").click(function(e) {
+            $(".hapus-guru-btn").click(function(e) {
                 e.preventDefault();
                 var formId = $(this).data('form-id');
-                var userName = $(this).data('nama-usr');
+                var guru = $(this).data('nama-gr');
 
                 swal({
                     title: 'Apakah anda yakin?',
-                    text: 'Akan menghapus user ' + userName + ' !',
+                    text: 'Akan menghapus guru ' + guru + ' !',
                     icon: 'warning',
                     buttons: true,
                     dangerMode: true,

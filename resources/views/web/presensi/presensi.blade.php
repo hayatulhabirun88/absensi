@@ -14,105 +14,169 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="ekstrakulikuler" class="form-label">Ekstrakulikuler</label>
-                                <select class="form-control" name="ekstrakulikuler" id="ekstrakulikuler">
-                                    <option selected>Pilih Ekstrakulikuler</option>
-                                    @foreach ($ekstrakulikuler as $eskul)
-                                        <option value="{{ $eskul->id }}"
-                                            {{ Request::input('ekstrakulikuler') == $eskul->id ? 'selected' : '' }}>
-                                            {{ $eskul->nama_ekstrakulikuler }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <form action="{{ route('presensi.simpan_sesi') }}" method="post">
+                                @csrf
 
-                            @if (auth()->user()->level == 'pembina')
-                                <input type="hidden" value="{{ auth()->user()->pembina->id }}" name="pembina"
-                                    id="pembina">
-                            @else
+                                @if (auth()->user()->level == 'guru')
+                                    <input type="hidden" value="{{ auth()->user()->guru->id }}" name="guru"
+                                        id="guru">
+                                @else
+                                    <div class="mb-3">
+                                        <label for="guru" class="form-label">Guru</label>
+                                        <select class="form-control" name="guru" id="guru">
+                                            <option selected>Pilih guru</option>
+                                            @foreach ($guru as $pembn)
+                                                <option value="{{ $pembn->id }}"
+                                                    {{ session()->get('guru_id') == $pembn->id ? 'selected' : '' }}>
+                                                    {{ $pembn->nama_guru }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                                 <div class="mb-3">
-                                    <label for="pembina" class="form-label">Pembina</label>
-                                    <select class="form-control" name="pembina" id="pembina">
-                                        <option selected>Pilih Pembina</option>
-                                        @foreach ($pembina as $pembn)
-                                            <option value="{{ $pembn->id }}">{{ $pembn->nama_pembina }}</option>
+                                    <label for="matapelajaran" class="form-label">Mata Pelajaran</label>
+                                    <select class="form-control" name="matapelajaran" id="matapelajaran">
+                                        <option selected>Pilih Mata Pelajaran</option>
+                                        @foreach ($matapelajaran as $mpelajaran)
+                                            <option value="{{ $mpelajaran->id }}"
+                                                {{ session()->get('matapelajaran') == $mpelajaran->id ? 'selected' : '' }}>
+                                                {{ $mpelajaran->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            @endif
-                            <div class="mb-3">
-                                <label for="tgl_presensi" class="form-label">Tanggal Presensi</label>
-                                <input type="date" class="form-control" name="tgl_presensi" id="tgl_presensi"
-                                    value="{{ date('Y-m-d') }}" placeholder="Tanggal Presensi" />
-                            </div>
-
+                                <div class="mb-3">
+                                    <label for="kelas" class="form-label">Kelas</label>
+                                    <select class="form-control" name="kelas" id="kelas">
+                                        <option selected>Pilih Kelas</option>
+                                        @foreach ($kelas as $kls)
+                                            <option value="{{ $kls->id }}"
+                                                {{ session()->get('kelas_id') == $kls->id ? 'selected' : '' }}>
+                                                {{ $kls->nama_kelas }} {{ $kls->program }} {{ $kls->jurusan }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tgl_presensi" class="form-label">Tanggal Presensi</label>
+                                    <input type="date" class="form-control" name="tgl_presensi" id="tgl_presensi"
+                                        value="{{ session()->get('tgl_presensi') ?? date('Y-m-d') }}"
+                                        placeholder="Tanggal Presensi" />
+                                </div>
+                                <input type="submit" value="Mulai Absen" class="btn btn-primary">
+                                <br><br>
+                            </form>
                         </div>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-md">
-                            <thead>
-                                <tr>
-                                    <th width="50">No</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Kelas</th>
-                                    <th>No HP</th>
-                                    <th width="150">Status Kehadiran</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pendaftar as $index => $pend)
+                    @if (session()->get('matapelajaran') && session()->get('tgl_presensi'))
+                        <div class="alert alert-success mb-3" width="100%">Absen
+                            {{ @\App\Models\Mata_pelajaran::find(session()->get('matapelajaran'))->nama }} pada tanggal
+                            {{ session()->get('tgl_presensi') }} oleh
+                            {{ @\App\Models\Guru::find(session()->get('guru_id'))->nama_guru }} di Kelas
+                            {{ @\App\Models\Kelas::find(session()->get('kelas_id'))->nama_kelas }}
+                            {{ @\App\Models\Kelas::find(session()->get('kelas_id'))->program }}
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-md">
+                                <thead>
                                     <tr>
-                                        <td>{{ $index + $pendaftar->firstItem() }}</td>
-                                        <td>{{ $pend->nama_lengkap }}</td>
-                                        <td>{{ $pend->kelas }}</td>
-                                        <td>{{ $pend->no_hp }}</td>
-                                        <td>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="status_kehadiran{{ $pend->id }}" value="Hadir"
-                                                        id="hadir_{{ $pend->id }}">
-                                                    <label class="form-check-label" for="hadir_{{ $pend->id }}">
-                                                        Hadir
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="status_kehadiran{{ $pend->id }}" value="Tidak Hadir"
-                                                        id="tidak_hadir_{{ $pend->id }}">
-                                                    <label class="form-check-label" for="tidak_hadir_{{ $pend->id }}">
-                                                        Tidak Hadir
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <th width="50">No</th>
+                                        <th width="50">Sts</th>
+                                        <th>Nama Lengkap/Kelas</th>
+                                        <th>Tahun Ajaran</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination justify-content-end ">
-                        <ul class="pagination">
-                            <li class="page-item {{ $pendaftar->onFirstPage() ? 'disabled' : '' }}">
-                                <a class="page-link" href="{{ $pendaftar->previousPageUrl() }}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
+                                </thead>
+                                <tbody>
+                                    @foreach ($siswa as $index => $sws)
+                                        @php
+                                            $riwayatpresensi = \App\Models\Presensi::where('siswa_id', $sws->id)
+                                                ->where('mata_pelajaran_id', session()->get('matapelajaran'))
+                                                ->where('guru_id', session()->get('guru_id'))
+                                                ->where('kelas_id', session()->get('kelas_id'))
+                                                ->where('tanggal', session()->get('tgl_presensi'))
+                                                ->first();
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $index + $siswa->firstItem() }}</td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="status_kehadiran{{ $sws->id }}" value="Hadir"
+                                                            id="hadir_{{ $sws->id }}"
+                                                            {{ @$riwayatpresensi->status == 'Hadir' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="hadir_{{ $sws->id }}">
+                                                            H
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="status_kehadiran{{ $sws->id }}" value="Terlambat"
+                                                            id="terlambat_{{ $sws->id }}"
+                                                            {{ @$riwayatpresensi->status == 'Terlambat' ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="terlambat_{{ $sws->id }}">
+                                                            T
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="status_kehadiran{{ $sws->id }}" value="Sakit"
+                                                            id="sakit_{{ $sws->id }}"
+                                                            {{ @$riwayatpresensi->status == 'Sakit' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="sakit_{{ $sws->id }}">
+                                                            S
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="status_kehadiran{{ $sws->id }}" value="Izin"
+                                                            id="izin_{{ $sws->id }}"
+                                                            {{ @$riwayatpresensi->status == 'Izin' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="izin_{{ $sws->id }}">
+                                                            I
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="status_kehadiran{{ $sws->id }}" value="Alpa"
+                                                            id="alpa_{{ $sws->id }}"
+                                                            {{ @$riwayatpresensi->status == 'Alpa' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="alpa_{{ $sws->id }}">
+                                                            A
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ $sws->nama }} <br>{{ $sws->kelas->nama_kelas }}
+                                                {{ $sws->kelas->program }} {{ $sws->kelas->jurusan }}<br>
+                                                @if ($riwayatpresensi)
+                                                    @if ($riwayatpresensi->status == 'Hadir')
+                                                        <span id="riwayat_presensi-{{ $sws->id }}"
+                                                            class="badge badge-success">{{ $riwayatpresensi->status }}
+                                                        </span>
+                                                    @elseif ($riwayatpresensi->status == 'Alpa')
+                                                        <span id="riwayat_presensi-{{ $sws->id }}"
+                                                            class="badge badge-danger">{{ $riwayatpresensi->status }}
+                                                        </span>
+                                                    @else
+                                                        <span id="riwayat_presensi-{{ $sws->id }}"
+                                                            class="badge badge-warning">{{ $riwayatpresensi->status }}
+                                                        </span>
+                                                    @endif
+                                                @else
+                                                    <span id="riwayat_presensi-{{ $sws->id }}"
+                                                        class="badge badge-light">Belum Absen</span>
+                                                @endif
 
-                            @foreach ($pendaftar->getUrlRange(1, $pendaftar->lastPage()) as $page => $url)
-                                <li class="page-item {{ $page == $pendaftar->currentPage() ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                </li>
-                            @endforeach
+                                            </td>
+                                            <td>{{ $sws->kelas->tahun_ajaran }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        {{ $siswa->links('pagination::bootstrap-5') }}
+                    @endif
 
-                            <li class="page-item {{ $pendaftar->hasMorePages() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $pendaftar->nextPageUrl() }}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -136,57 +200,41 @@
     <script>
         $(document).ready(function() {
 
-            $('#searchInput').keypress(function(e) {
-                // Check if the key pressed is Enter (keyCode 13)
-                if (e.which == 13) {
-                    e.preventDefault(); // Prevent the default action (form submission)
-                    $('#searchForm').submit(); // Submit the form
-                }
-            });
-
-
-            $(".hapus-pendaftar-btn").click(function(e) {
-                e.preventDefault();
-                var formId = $(this).data('form-id');
-                var pendaftarName = $(this).data('nama-pend');
-
-                swal({
-                    title: 'Apakah anda yakin?',
-                    text: 'Akan menghapus pendaftar ' + pendaftarName + ' !',
-                    icon: 'warning',
-                    buttons: true,
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        $("#" + formId).submit();
-                    }
-                });
-            });
 
             $('input[type="radio"]').on('change', function() {
                 let id = $(this).attr('name').replace('status_kehadiran', '');
                 let status = $(this).val();
-                let pembina_id = $("#pembina").val();
-                let ekstrakulikuler_id = $("#ekstrakulikuler").val();
-                let tgl_presensi = $("#tgl_presensi").val();
-
                 $.ajax({
                     url: '/presensi/ajax-update-presensi', // Your endpoint to handle the request
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
-                        pendaftar_id: id,
-                        status_kehadiran: status,
-                        pembina_id: pembina_id,
-                        ekstrakulikuler_id: ekstrakulikuler_id,
-                        tgl_presensi: tgl_presensi
+                        siswa_id: id,
+                        status: status,
                     },
                     success: function(response) {
+                        console.log('#riwayat_presensi' + response.siswa_id)
                         iziToast.success({
                             title: 'Sukses!',
-                            message: 'Presensi berhasil di tambahkan!',
+                            message: `'${response.message}'`,
                             position: 'topRight'
                         });
+
+                        // Update status di elemen dengan ID 'riwayat_presensi'
+                        $('#riwayat_presensi-' + response.siswa_id).removeClass().addClass(
+                            'badge');
+
+                        if (response.status_kehadiran === 'Hadir') {
+                            $('#riwayat_presensi-' + response.siswa_id).addClass(
+                                'badge-success').text(response.status_kehadiran);
+                        } else if (response.status_kehadiran === 'Alpa') {
+                            $('#riwayat_presensi-' + response.siswa_id).addClass('badge-danger')
+                                .text(response.status_kehadiran);
+                        } else {
+                            $('#riwayat_presensi-' + response.siswa_id).addClass(
+                                'badge-warning').text(response.status_kehadiran);
+                        }
+
                     },
                     error: function(xhr, status, error) {
                         swal('Error', 'Periksa Kembali Inputan Anda!', 'error');

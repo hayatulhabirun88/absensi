@@ -29,8 +29,8 @@
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="text-center">
-                            <h5 class="text-center">Sistem Informasi Ekstrakurikuler</h5>
-                            <h5 class="text-center">SMAN 1 Baubau</h5>
+                            <h5 class="text-center">Sistem Informasi Presensi</h5>
+                            <h5 class="text-center">SMAN 3 Lapandewa</h5>
 
                         </div><br>
                         <div class="card card-primary">
@@ -39,7 +39,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="text-center" style="margin:0px auto;">
-                                    <img width="150" src="{{ asset('/logo.png') }}" alt="">
+                                    <img width="200" src="{{ asset('/logo.jpg') }}" alt="">
                                 </div>
                                 <p class="text-center">Silahkan login</p>
                                 <form id="formAuthentication" class="mb-3" action="{{ route('proses.login') }}"

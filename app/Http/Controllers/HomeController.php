@@ -8,13 +8,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $user = auth()->user();
-            if ($user->level == 'siswa' || $user->level == 'orang_tua') {
-                return redirect('/mobile/dashboard');
-            }
-            return $next($request);
-        });
+        $this->middleware('auth');
     }
 
     /**
@@ -54,7 +48,7 @@ class HomeController extends Controller
      */
     public function edit(string $id)
     {
-
+        //
     }
 
     /**

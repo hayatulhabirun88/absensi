@@ -1,64 +1,68 @@
 @extends('web.template.content')
 
-@section('title')
-    Daftar Pengguna
-@endsection
+@section('title', 'Siswa')
 
 @section('content')
     <div class="row ">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Daftar Pengguna</h4>
+                    <h4>Siswa</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-8">
                             <div class="mb-3">
-                                <form action="/pengguna" method="get" id="searchForm">
+                                <form action="/siswa" method="get" id="searchForm">
                                     <input type="text" class="form-control" name="cari" id="searchInput"
-                                        placeholder="Cari" />
+                                        value="{{ Request::get('cari') }}" placeholder="Cari" autofocus />
                                 </form>
                             </div>
 
                         </div>
                         <div class="col-4">
-                            <a type="submit" name="" id="" class="btn btn-primary float-right "
-                                href="/pengguna/create" role="button">Tambah</a>
 
+                            <a type="submit" name="" id="" class="btn btn-success float-right "
+                                href="/import-data-view" role="button">Import Data Siswa</a>
+                            &nbsp;&nbsp;
+                            <a type="submit" name="" id="" class="btn btn-primary float-right "
+                                href="/siswa/create" role="button">Tambah</a>
                         </div>
 
                     </div>
+
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-md">
                             <thead>
                                 <tr>
                                     <th width="50">No</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
-                                    <th>Level</th>
+                                    <th>Nama Siswa</th>
+                                    <th>NIS</th>
+                                    <th>Kelas</th>
+                                    <th>Tahun Ajaran</th>
                                     <th width="150">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($user as $index => $usr)
+                                @foreach ($siswa as $index => $sws)
                                     <tr>
-                                        <td>{{ $index + $user->firstItem() }}</td>
-                                        <td>{{ $usr->name }}</td>
-                                        <td>{{ $usr->email }}</td>
-                                        <td>{{ $usr->level }}</td>
-                                        </td>
+                                        <td>{{ $index + $siswa->firstItem() }}</td>
+                                        <td>{{ $sws->nama }}</td>
+                                        <td>{{ $sws->nis }}</td>
+                                        <td>{{ @$sws->kelas->nama_kelas }} {{ @$sws->kelas->program }}
+                                            {{ @$sws->kelas->jurusan }}</td>
+                                        <td>{{ @$sws->kelas->tahun_ajaran }}</td>
                                         <td>
-                                            <a href="/pengguna/{{ $usr->id }}/edit" class="btn btn-sm btn-warning"><i
+                                            <a href="/siswa/{{ $sws->id }}/edit" class="btn btn-sm btn-warning"><i
                                                     class="far fa-edit"></i></a>
-                                            <form action="{{ route('destroy.pengguna', $usr->id) }}" style="display:inline"
-                                                method="POST" id="deleteuserForm-{{ $usr->id }}">
+                                            <form action="{{ route('siswa.destroy', $sws->id) }}" style="display:inline"
+                                                method="POST" id="deletesiswaForm-{{ $sws->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger hapus-user-btn"
-                                                    data-nama-usr="{{ $usr->name }}"
-                                                    data-form-id="deleteuserForm-{{ $usr->id }}">
+                                                <button type="submit" class="btn btn-sm btn-danger hapus-siswa-btn"
+                                                    data-nama-sws="{{ $sws->nama_siswa }}"
+                                                    data-form-id="deletesiswaForm-{{ $sws->id }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -67,16 +71,15 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $siswa->links('pagination::bootstrap-5') }}
                     </div>
-                    {{ $user->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
-@endsection
 
-@push('style')
-@endpush
+
+@endsection
 
 @push('script')
     <!-- JS Libraies -->
@@ -96,14 +99,14 @@
             });
 
 
-            $(".hapus-user-btn").click(function(e) {
+            $(".hapus-siswa-btn").click(function(e) {
                 e.preventDefault();
                 var formId = $(this).data('form-id');
-                var userName = $(this).data('nama-usr');
+                var siswa = $(this).data('nama-sws');
 
                 swal({
                     title: 'Apakah anda yakin?',
-                    text: 'Akan menghapus user ' + userName + ' !',
+                    text: 'Akan menghapus Siswa ' + siswa + ' !',
                     icon: 'warning',
                     buttons: true,
                     dangerMode: true,
