@@ -16,7 +16,6 @@
                         <div class="col-md-12">
                             <form action="{{ route('presensi.simpan_sesi') }}" method="post">
                                 @csrf
-
                                 @if (auth()->user()->level == 'guru')
                                     <input type="hidden" value="{{ auth()->user()->guru->id }}" name="guru"
                                         id="guru">
@@ -51,7 +50,8 @@
                                         @foreach ($kelas as $kls)
                                             <option value="{{ $kls->id }}"
                                                 {{ session()->get('kelas_id') == $kls->id ? 'selected' : '' }}>
-                                                {{ $kls->nama_kelas }} {{ $kls->program }} {{ $kls->jurusan }}</option>
+                                                {{ $kls->nama_kelas }} {{ $kls->program }} {{ $kls->jurusan }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -61,6 +61,9 @@
                                         value="{{ session()->get('tgl_presensi') ?? date('Y-m-d') }}"
                                         placeholder="Tanggal Presensi" />
                                 </div>
+
+
+
                                 <input type="submit" value="Mulai Absen" class="btn btn-primary">
                                 <br><br>
                             </form>
@@ -166,6 +169,9 @@
                                                     <span id="riwayat_presensi-{{ $sws->id }}"
                                                         class="badge badge-light">Belum Absen</span>
                                                 @endif
+                                                <br><br>
+                                                <button class="btn btn-sm btn-danger  hapus-btn"
+                                                    data-id="{{ $sws->id }}"><i class="fas fa-trash"></i></button>
 
                                             </td>
                                             <td>{{ $sws->kelas->tahun_ajaran }}</td>
@@ -200,7 +206,6 @@
     <script>
         $(document).ready(function() {
 
-
             $('input[type="radio"]').on('change', function() {
                 let id = $(this).attr('name').replace('status_kehadiran', '');
                 let status = $(this).val();
@@ -213,7 +218,6 @@
                         status: status,
                     },
                     success: function(response) {
-                        console.log('#riwayat_presensi' + response.siswa_id)
                         iziToast.success({
                             title: 'Sukses!',
                             message: `'${response.message}'`,
@@ -242,11 +246,39 @@
                 });
             });
 
-            $('#ekstrakulikuler').on('change', function() {
-                var eskulId = $(this).val();
-                if (eskulId) {
-                    window.location.href = '/presensi?ekstrakulikuler=' + eskulId;
-                }
+            $('.hapus-btn').click(function() {
+                let id = $(this).data('id');
+                $.ajax({
+                    url: '/presensi/ajax-delete-presensi',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        siswa_id: id,
+                    },
+                    success: function(response) {
+                        iziToast.error({
+                            title: 'Sukses!',
+                            message: `'${response.message}'`,
+                            position: 'topRight'
+                        });
+
+                        // Update status di elemen dengan ID 'riwayat_presensi'
+                        $('#riwayat_presensi-' + response.siswa_id).removeClass().addClass(
+                            'badge');
+
+                        if (response.status_kehadiran === 'Belum Absen') {
+                            $('#riwayat_presensi-' + response.siswa_id).addClass(
+                                'badge-light').text(response.status_kehadiran);
+                        }
+
+                        // Reset radio button yang aktif
+                        $('input[name="status_kehadiran' + response.siswa_id + '"]').prop(
+                            'checked', false);
+                    },
+                    error: function(xhr, status, error) {
+                        swal('Error', 'Periksa Kembali Inputan Anda!', 'error');
+                    }
+                });
             });
 
         });

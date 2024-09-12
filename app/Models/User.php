@@ -45,15 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
-    public function pendaftar()
+    public function guru()
     {
-        return $this->hasOne(Pendaftar::class);
-    }
-
-    public function pembina()
-    {
-        return $this->hasOne(Pembina::class);
+        return $this->hasOne(Guru::class);
     }
 
 }

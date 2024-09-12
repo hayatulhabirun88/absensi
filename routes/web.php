@@ -36,7 +36,9 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'proses'])->name('proses.login');
+Route::post('/login', [LoginController::class, 'proses'])
+    ->name('proses.login')
+    ->middleware('throttle:10,15');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
@@ -50,7 +52,11 @@ Route::resource('guru', GuruController::class);
 Route::resource('presensi', PresensiController::class);
 Route::post('simpan/sesi', [PresensiController::class, 'simpan_sesi'])->name('presensi.simpan_sesi');
 Route::post('/presensi/ajax-update-presensi', [PresensiController::class, 'ajax_update_presensi'])->name('presensi.ajax.update');
+Route::post('/presensi/ajax-delete-presensi', [PresensiController::class, 'ajax_delete_presensi'])->name('presensi.ajax.delete');
 Route::get('/presensi-laporan', [PresensiController::class, 'laporan'])->name('presensi.laporan');
+Route::get('/presensi-export-bulanan', [PresensiController::class, 'export_bulanan'])->name('presensi.export-bulanan');
+Route::get('/presensi-laporan-bulanan', [PresensiController::class, 'view_report_bulanan'])->name('presensi.report-bulanan');
+Route::get('/export-laporan-bulanan', [PresensiController::class, 'proses_report_bulanan'])->name('presensi.proses.laporan.bulanan');
 Route::get('/presensi-filter-laporan', [PresensiController::class, 'filterLaporan'])->name('presensi.filterLaporan');
 Route::get('/presensi-export-laporan', [PresensiController::class, 'exportLaporan'])->name('presensi.exportLaporan');
 
