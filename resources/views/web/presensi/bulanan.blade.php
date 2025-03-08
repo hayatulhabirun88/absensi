@@ -14,7 +14,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="{{ url('/export-laporan-bulanan') }}" method="GET">
+                            <form action="{{ url('/export-laporan-bulanan') }}" method="POST">
+                                @csrf
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <div class="mb-3">

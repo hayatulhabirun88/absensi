@@ -45,11 +45,15 @@ class MataPelajaranController extends Controller
         $request->validate([
             'nama' => 'required|string',
             'kode' => 'required|string',
+            'jam_awal' => 'required',
+            'jam_akhir' => 'required',
         ]);
 
         Mata_pelajaran::create([
             'nama' => $request->nama,
             'kode' => $request->kode,
+            'jam_awal' => $request->jam_awal,
+            'jam_akhir' => $request->jam_akhir,
         ]);
 
         return redirect()->to('/mata-pelajaran')->with('success', 'Data berhasil di Simpan');
@@ -82,11 +86,15 @@ class MataPelajaranController extends Controller
         $request->validate([
             'nama' => 'required|string',
             'kode' => 'required|string',
+            'jam_awal' => 'required',
+            'jam_akhir' => 'required',
         ]);
 
         Mata_pelajaran::findOrFail($id)->update([
             'nama' => $request->nama,
             'kode' => $request->kode,
+            'jam_awal' => $request->jam_awal,
+            'jam_akhir' => $request->jam_akhir,
         ]);
 
         return redirect()->to('/mata-pelajaran')->with('success', 'Data berhasil di Ubah');

@@ -44,6 +44,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 Route::resource('siswa', SiswaController::class);
+Route::get('cetak_kartu', [SiswaController::class, 'cetak_kartu'])->name('siswa.cetak_kartu');
 Route::get('import-data-view', [SiswaController::class, 'import_data_view'])->name('import_data_view');
 Route::post('import-data', [SiswaController::class, 'import_data'])->name('import_data');
 Route::resource('mata-pelajaran', MataPelajaranController::class);
@@ -56,9 +57,16 @@ Route::post('/presensi/ajax-delete-presensi', [PresensiController::class, 'ajax_
 Route::get('/presensi-laporan', [PresensiController::class, 'laporan'])->name('presensi.laporan');
 Route::get('/presensi-export-bulanan', [PresensiController::class, 'export_bulanan'])->name('presensi.export-bulanan');
 Route::get('/presensi-laporan-bulanan', [PresensiController::class, 'view_report_bulanan'])->name('presensi.report-bulanan');
-Route::get('/export-laporan-bulanan', [PresensiController::class, 'proses_report_bulanan'])->name('presensi.proses.laporan.bulanan');
+Route::post('/export-laporan-bulanan', [PresensiController::class, 'proses_report_bulanan'])->name('presensi.proses.laporan.bulanan');
+
+Route::get('/presensi-laporan-semester', [PresensiController::class, 'view_report_semester'])->name('presensi.report-semester');
+Route::post('/export-laporan-semester', [PresensiController::class, 'proses_report_semester'])->name('presensi.proses.laporan.semester');
+
+
 Route::get('/presensi-filter-laporan', [PresensiController::class, 'filterLaporan'])->name('presensi.filterLaporan');
 Route::get('/presensi-export-laporan', [PresensiController::class, 'exportLaporan'])->name('presensi.exportLaporan');
+Route::get('/lakukan_presensi', [PresensiController::class, 'lakukan_presensi'])->name('presensi.lakukan_presensi');
+Route::post('/ajax_proses_presensi_qr_code', [PresensiController::class, 'ajax_proses_presensi_qr_code'])->name('presensi.ajax.proses_qr');
 
 
 

@@ -36,6 +36,8 @@
                                     <th width="50">No</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kode Mata Pelajaran</th>
+                                    <th>Jam Awal</th>
+                                    <th>Jam Akhir</th>
                                     <th width="150">Aksi</th>
                                 </tr>
                             </thead>
@@ -45,6 +47,8 @@
                                         <td>{{ $index + $mata_pelajaran->firstItem() }}</td>
                                         <td>{{ $mtl->nama }}</td>
                                         <td>{{ $mtl->kode }}</td>
+                                        <td>{{ $mtl->jam_awal }}</td>
+                                        <td>{{ $mtl->jam_akhir }}</td>
                                         <td>
                                             <a href="/mata-pelajaran/{{ $mtl->id }}/edit"
                                                 class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>

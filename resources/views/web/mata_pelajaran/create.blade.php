@@ -30,6 +30,24 @@
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label for="jam_awal">Jam Awal</label>
+                            <input type="time" class="form-control" name="jam_awal" id="jam_awal"
+                                value="{{ old('jam_awal') }}" required>
+                            @error('jam_awal')
+                                <span class="text-danger" style="font-size:13px;">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jam_akhir">Jam Akhir</label>
+                            <input type="time" class="form-control" name="jam_akhir" id="jam_akhir"
+                                value="{{ old('jam_akhir') }}" required>
+                            @error('jam_akhir')
+                                <span class="text-danger" style="font-size:13px;">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <br>
 
                         <button class="btn btn-primary">Tambah</button>

@@ -137,4 +137,10 @@ class SiswaController extends Controller
         return redirect()->to('siswa')->with('success', 'Data berhasil diimpor.');
 
     }
+
+    public function cetak_kartu()
+    {
+        $siswa = Siswa::all();
+        return view('web.siswa.cetak_kartu', compact(['siswa']));
+    }
 }

@@ -77,9 +77,6 @@
 
                             </div>
                         </div>
-                        {{-- <div class="mt-5 text-muted text-center">
-                            Belum punya akun? <a href="/daftar">Daftar</a>
-                        </div> --}}
                     </div>
                 </div>
             </div>
